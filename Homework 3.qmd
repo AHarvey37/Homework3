@@ -48,7 +48,7 @@ The data sets we'll use for this part comes from the [UCI machine learning repos
 
 #### Glass data
 
-The forst data set is called **glass.data**. You'll need to open the raw data set to determine the type of delimiter. the data is available at:[https://www4.stat.ncsu.edu/~online/dataset/glass/data](https://www4.stat.ncsu.edu/~online/dataset/glass/data).
+The first data set is called **glass.data**. You'll need to open the raw data set to determine the type of delimiter. the data is available at:[https://www4.stat.ncsu.edu/~online/dataset/glass/data](https://www4.stat.ncsu.edu/~online/dataset/glass/data).
 
 - The description of the data (not super useful!):
 
@@ -86,6 +86,81 @@ beagle<- beagle|>
                                                                        if_else(beagle$Type_of_Glass==7,
                                                                                "headlamps",
                                                                                "ERROR"))))))))|>
-  filter(Fe<0.2 & Type_of_Glass == c("tableware","headlamps"))
+  filter(Fe<0.2 & Type_of_Glass == c("tableware","headlamps"))|>
+  print()
 ```
 
+```{r}
+yeast <- as.tibble(read_table("https://www4.stat.ncsu.edu/~online/datasets/yeast.data",
+                              col_names = FALSE))|>
+  rename("seq_name" = 1,
+         "mcg" = 2,
+         "gvh" = 3,
+         "alm" = 4,
+         "mit" = 5,
+         "erl" = 6,
+         "pox" = 7,
+         "vac" = 8,
+         "nuc" = 9,
+         "class"= 10)
+yeast
+```
+
+```{r}
+yeast <- yeast |>
+  select(-c(seq_name, nuc))|>
+  mutate(across(1:7,list(mean = mean, median = median), .names = "{.fn}_{.col}"))|>
+  print()
+```
+
+#Task 3: Combining Excel and Delimited Data
+
+```{r}
+library(readxl)
+white_wine <- as.tibble(read_excel("data/white-wine.xlsx",
+           sheet = excel_sheets("data/white-wine.xlsx")[1]))
+white_wine
+```
+
+```{r}
+white_wine_names <- read_excel("data/white-wine.xlsx",
+                               sheet = excel_sheets("data/white-wine.xlsx")[2])
+
+colnames(white_wine) <- pull(white_wine_names,1)
+
+white_wine
+```
+
+```{r}
+white_wine<- white_wine|> mutate("Type" = "white")
+```
+
+
+```{r red wine}
+red_wine<- read_delim("https://www4.stat.ncsu.edu/~online/datasets/red-wine.csv",
+                      delim = ";")
+colnames(red_wine)<- pull(white_wine_names,1)
+red_wine<- red_wine|>
+  mutate("Type" = "red")
+red_wine
+```
+
+```{r combine wine data}
+wine_data <- bind_rows(white_wine,red_wine)
+wine_data
+```
+
+```{r}
+wine_data <- wine_data |>
+  filter(quality > 6.5 & alcohol < 132)|>
+  arrange(desc(quality))|>
+  select(contains("acid"),
+         alcohol,
+         Type,quality)|>
+  group_by(quality)|>
+  mutate(across(alcohol,
+                list(mean,sd),
+                .names = "{.fn}_{.col}"))
+```
+
+#Task 4: Database Practice
