@@ -9,20 +9,83 @@ editor: visual
 # Task 1: Conceptual Questions
 1. If your working directory is **myfolder/homework/**, what *relative* path would you specify to get the file located at **myfolder/MyData.csv**?
 
+- Use read.csv("MyData.csv")
+
 2. What are the major benefits of using R projects?
+
+- R Projects help facilitate the use of version control as well as housing all associated files in one place
 
 3. What is git and what is github?
 
+- Git is a local software that enables version control with files on your computer. Github is a internet hosted website that also allows for version control but on the website instead of on you local machine. Github facilitates collaboration for multiple users. It interacts with Git to allow this collaboration without constant direct manipulation on the Github website.
+
 4. What are the two main differences between a tibble and a data.frame?
 
+- A data.frame is a 2D, heterogeneous, base R object composed of rows and columns, where elements of columns must be of the same type but elements of rows may differ. A tibble is a lazy data frame specific to the tidyverse that returns errors more often forcing the user to clean the data earlier.  
+
 5. Rewrite the following nested function call using baseR’s chaining operator:
-|    arrange(filter(select(as_tibble(iris), starts_with("Petal"), Species), Petal.Length < 1.55), Species)
+    
+```{r, eval = FALSE}
+arrange(filter(select(as_tibble(iris), starts_with("Petal"), Species), Petal.Length < 1.55), Species)
+```
+
+- chained function is:
+```{r, eval = FALSE}
+as_tibble(iris) |>
+  select(starts_with("Petal"), Species) |>
+  filter(Petal.Length < 1.55)|>
+  arrange(Species)
+```
 
 6. What is meant by long format data and wide format data? Which do we generally prefer for statistical analysis?
 
+- Long format data is where every row consists of a single observation and every column consists of a single variable. Wide format data is where more than one observation in a row. For statistical analysis we prefer long formatted data. 
+
 #Task 2: Reading Delimited Data
 
-```{r}
+*Note: Use chaining where possible!*
+The data sets we'll use for this part comes from the [UCI machine learning repository](https://archive.ics.uci.edu/datasets).
 
+#### Glass data
+
+The forst data set is called **glass.data**. You'll need to open the raw data set to determine the type of delimiter. the data is available at:[https://www4.stat.ncsu.edu/~online/dataset/glass/data](https://www4.stat.ncsu.edu/~online/dataset/glass/data).
+
+- The description of the data (not super useful!):
+
+|      Vina conducted a comparison test of her rule-based system, BEAGLE, the nearest-neighbor
+|       algorithm, and discriminant analysis. BEAGLE isa product available through VRS Consulting,
+|       Inc.; 4676 Admiralty Way, Suite 206; Marina Del Ray, CA 90292 (213) 827-7890 and FAX: -
+|      3189. In determining whether the glass was a type of ‘float’ glass or not, the following results
+|      were obtained (# incorrect answers): Type of Sample Beagle NN DA Windows that were float
+|       processed (87) 10 12 21 Windows that were not: (76) 19 16 22 The study of classification of types
+|       of glass was motivated by criminologist investigation. At the scene of the crime, the glass left
+|       can be used as evidence. . . if it is correctly identified!
+
+```{r}
+library(tidyverse)
+beagle <- as_tibble(read.csv("https://www4.stat.ncsu.edu/~online/datasets/glass.data",
+                             header = FALSE))|>
+  rename("Id"=1,"RI"=2,"Na"=3,"Mg"=4,"Al"=5,"Si"=6,"K"=7,"Ca"=8,"Ba"=9,"Fe"=10, "Type_of_Glass"= 11)
+beagle
+```
+
+```{r}
+beagle<- beagle|>
+  mutate(Type_of_Glass = if_else(beagle$Type_of_Glass==1,
+                                 "building_windows_float_processed",
+                                 if_else(beagle$Type_of_Glass==2,
+                                         "building_windows_non_float_processed",
+                                         if_else(beagle$Type_of_Glass==3,
+                                               "vehicle_windows_float_processed",
+                                               if_else(beagle$Type_of_Glass==4,
+                                                       "vehicle_windows_non_float_processed",
+                                                       if_else(beagle$Type_of_Glass==5,
+                                                               "containers",
+                                                               if_else(beagle$Type_of_Glass==6,
+                                                                       "tableware",
+                                                                       if_else(beagle$Type_of_Glass==7,
+                                                                               "headlamps",
+                                                                               "ERROR"))))))))|>
+  filter(Fe<0.2 & Type_of_Glass == c("tableware","headlamps"))
 ```
 

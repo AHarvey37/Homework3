@@ -22,6 +22,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -79,16 +113,67 @@ ul.task-list li input[type="checkbox"] {
 <section id="task-1-conceptual-questions" class="level1">
 <h1>Task 1: Conceptual Questions</h1>
 <ol type="1">
-<li><p>If your working directory is <strong>myfolder/homework/</strong>, what <em>relative</em> path would you specify to get the file located at <strong>myfolder/MyData.csv</strong>?</p></li>
-<li><p>What are the major benefits of using R projects?</p></li>
-<li><p>What is git and what is github?</p></li>
-<li><p>What are the two main differences between a tibble and a data.frame?</p></li>
-<li><p>Rewrite the following nested function call using baseR’s chaining operator: | arrange(filter(select(as_tibble(iris), starts_with(“Petal”), Species), Petal.Length &lt; 1.55), Species)</p></li>
-<li><p>What is meant by long format data and wide format data? Which do we generally prefer for statistical analysis?</p></li>
+<li>If your working directory is <strong>myfolder/homework/</strong>, what <em>relative</em> path would you specify to get the file located at <strong>myfolder/MyData.csv</strong>?</li>
 </ol>
 <ul>
-<li>“.csv”</li>
+<li>Use read.csv(“MyData.csv”)</li>
 </ul>
+<ol start="2" type="1">
+<li>What are the major benefits of using R projects?</li>
+</ol>
+<ul>
+<li>R Projects help facilitate the use of version control as well as housing all associated files in one place</li>
+</ul>
+<ol start="3" type="1">
+<li>What is git and what is github?</li>
+</ol>
+<ul>
+<li>Git is a local software that enables version control with files on your computer. Github is a internet hosted website that also allows for version control but on the website instead of on you local machine. Github facilitates collaboration for multiple users. It interacts with Git to allow this collaboration without constant direct manipulation on the Github website.</li>
+</ul>
+<ol start="4" type="1">
+<li>What are the two main differences between a tibble and a data.frame?</li>
+</ol>
+<ul>
+<li>A data.frame is a 2D, heterogeneous, base R object composed of rows and columns, where elements of columns must be of the same type but elements of rows may differ. A tibble is a lazy data frame specific to the tidyverse that returns errors more often forcing the user to clean the data earlier.</li>
+</ul>
+<ol start="5" type="1">
+<li>Rewrite the following nested function call using baseR’s chaining operator:</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">arrange</span>(<span class="fu">filter</span>(<span class="fu">select</span>(<span class="fu">as_tibble</span>(iris), <span class="fu">starts_with</span>(<span class="st">"Petal"</span>), Species), Petal.Length <span class="sc">&lt;</span> <span class="fl">1.55</span>), Species)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>chained function is:</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(iris) <span class="sc">|&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">starts_with</span>(<span class="st">"Petal"</span>), Species) <span class="sc">|&gt;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Petal.Length <span class="sc">&lt;</span> <span class="fl">1.55</span>)<span class="sc">|&gt;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(Species)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="6" type="1">
+<li>What is meant by long format data and wide format data? Which do we generally prefer for statistical analysis?</li>
+</ol>
+<ul>
+<li>Long format data is where every row consists of a single observation and every column consists of a single variable. Wide format data is where more than one observation in a row. For statistical analysis we prefer long formatted data.</li>
+</ul>
+<p>#Task 2: Reading Delimited Data</p>
+<p><em>Note: Use chaining where possible!</em> The data sets we’ll use for this part comes from the <a href="https://archive.ics.uci.edu/datasets">UCI machine learning repository</a>.</p>
+<section id="glass-data" class="level4">
+<h4 class="anchored" data-anchor-id="glass-data">Glass data</h4>
+<p>The forst data set is called <strong>glass.data</strong>. You’ll need to open the raw data set to determine the type of delimiter. the data is available at:<a href="https://www4.stat.ncsu.edu/~online/dataset/glass/data">https://www4.stat.ncsu.edu/~online/dataset/glass/data</a>.</p>
+<ul>
+<li>The description of the data (not super useful!):</li>
+</ul>
+<div class="line-block">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vina conducted a comparison test of her rule-based system, BEAGLE, the nearest-neighbor<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;algorithm, and discriminant analysis. BEAGLE isa product available through VRS Consulting,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Inc.; 4676 Admiralty Way, Suite 206; Marina Del Ray, CA 90292 (213) 827-7890 and FAX: -<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3189. In determining whether the glass was a type of ‘float’ glass or not, the following results<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;were obtained (# incorrect answers): Type of Sample Beagle NN DA Windows that were float<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;processed (87) 10 12 21 Windows that were not: (76) 19 16 22 The study of classification of types<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;of glass was motivated by criminologist investigation. At the scene of the crime, the glass left<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;can be used as evidence. . . if it is correctly identified!</div>
+</section>
 </section>
 
 </main>
