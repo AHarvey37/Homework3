@@ -164,3 +164,70 @@ wine_data <- wine_data |>
 ```
 
 #Task 4: Database Practice
+
+Download the **Lahman.db** file associated with the *Connecting to Databases* notes/video.
+
+1. Connect to the database and then look at all of the tables in the database.
+
+```{r}
+library(DBI)
+con <- dbConnect(RSQLite::SQLite(), "data/lahman.db")
+dbListTables(con)
+```
+
+2. Use the tbl() function and dplyr to return all of the data from the Teams table for the year 2015.
+
+```{r}
+teams <- tbl(con, "Teams") |>
+  filter(yearID == 2015)
+teams
+```
+
+3. Repeat the above by using the sql() function within tbl() (here you have to write actual SQL!).
+
+```{r}
+teams2 <- tbl(con, sql(
+  "SELECT * FROM Teams 
+  WHERE yearID = 2015"))
+teams2
+```
+
+**Either use dplyr or write SQL queries for the rest of these questions!**
+
+4. Return all of the players in the hall of fame, the year they were voted into the hall of fame, and their category (only those three variables!). See the HallOfFame table, the inducted variable is important here.
+
+```{r}
+Hall_of_Fame <- as_tibble(tbl(con, "HallofFame"))|>
+  filter(inducted == "Y")|>
+  select(playerID, yearID, category)
+
+Hall_of_Fame
+```
+
+5. Combine the table from the previous question with the People table in order to have the nameFirst and nameLast names added to what was returned above.
+```{r}
+people <- as_tibble(tbl(con, "People"))
+names(people)
+people <- people|>
+  select(nameFirst,nameLast,playerID)
+new_HoF <- right_join(people,Hall_of_Fame,by = "playerID")
+```
+
+6. Return only the playerID (manager ID in this case), G, W, and L columns from the Managers table. Use chaining to then:
+
+- Determine the overall win/loss records (sum of wins and sum of losses) for each of these hall of fame managers.
+
+– We haven’t quite covered this so I’ll help out. We want to use group_by() with summarize() rather than mutate(). Something like this:
+
+tbl(con, "Managers") |>
+  select(...) |>
+  group_by(playerID) |>
+  summarize(G_managed = sum(G, na.rm = TRUE),
+    Total_W = sum(W, na.rm = TRUE),
+    Total_L = sum(L, na.rm = TRUE))
+    
+- Create a new variable that is the career win/loss percentage (Total_W/G_managed). (Note: I did this after collect() otherwise the column type has to be set. . . )
+
+- Sort the resulting data by the win/loss percentage variable (from largest to smallest).
+
+7. Use the results from the previous two questions to answer this one! Return information for only the people that managed a team and were inducted into the hall of fame (regardless of their category in the hall of fame - you want to return all people in the hall of fame that ever managed at all). (Just return all of the variables from both of the above two questions - 9 total columns)
