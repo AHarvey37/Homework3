@@ -6,7 +6,7 @@ format: html
 editor: visual
 ---
 ```{r echo=FALSE}
-knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 ```
 
 # Task 1: Conceptual Questions
