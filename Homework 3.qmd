@@ -6,7 +6,7 @@ format: html
 editor: visual
 ---
 ```{r echo=FALSE}
-knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+knitr::opts_chunk$set(message = FALSE)
 ```
 
 # Task 1: Conceptual Questions
@@ -114,7 +114,7 @@ beagle<- beagle|>
 ```
 
 
-####Yeast Data
+#### Yeast Data
 
 The second data set is called yeast.data. You’ll need to open the raw data set to determine the type of delimiter. The data is available at: [https://www4.stat.ncsu.edu/~online/datasets/yeast.data](https://www4.stat.ncsu.edu/~online/datasets/yeast.data).
 
