@@ -5,6 +5,9 @@ date: "30 May 2024"
 format: html
 editor: visual
 ---
+```{r echo=FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+```
 
 # Task 1: Conceptual Questions
 1. If your working directory is **myfolder/homework/**, what *relative* path would you specify to get the file located at **myfolder/MyData.csv**?
@@ -55,8 +58,8 @@ The first data set is called **glass.data**. You'll need to open the raw data se
 |      Vina conducted a comparison test of her rule-based system, BEAGLE, the nearest-neighbor
 |       algorithm, and discriminant analysis. BEAGLE isa product available through VRS Consulting,
 |       Inc.; 4676 Admiralty Way, Suite 206; Marina Del Ray, CA 90292 (213) 827-7890 and FAX: -
-|      3189. In determining whether the glass was a type of ‘float’ glass or not, the following results
-|      were obtained (# incorrect answers): Type of Sample Beagle NN DA Windows that were float
+|       3189. In determining whether the glass was a type of ‘float’ glass or not, the following results
+|       were obtained (# incorrect answers): Type of Sample Beagle NN DA Windows that were float
 |       processed (87) 10 12 21 Windows that were not: (76) 19 16 22 The study of classification of types
 |       of glass was motivated by criminologist investigation. At the scene of the crime, the glass left
 |       can be used as evidence. . . if it is correctly identified!
@@ -70,7 +73,7 @@ descriptions <- c("Number 1-214","Refractive index","Sodium (unit measurement: w
 display_table <- data.frame(variable, descriptions)
 names(display_table)<- V_names
 
-knitr::kable(display_table)
+knitr::kable(display_table, "simple")
 ```
 
 With the last variable being **Type of Glass** with values of – 1 building_windows_float_processed, – 2 building_windows_non_float_processed, – 3 vehicle_windows_float_processed, – 4 vehicle_windows_non_float_processed (none in this database), – 5 containers, – 6 tableware, – 7 headlamps.
